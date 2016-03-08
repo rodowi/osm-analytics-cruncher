@@ -3,17 +3,19 @@ var turf = require('turf');
 
 // Filter features touched by list of users defined by users.json
 module.exports = function(tileLayers, tile, writeData, done) {
-  var layer = tileLayers.osm.osm;
-  var users = {};
+    var layer = tileLayers.osm.osm;
+    var users = {};
 
-  layer.features.forEach(function(val) {
-    if (val.geometry.type !== "LineString") return;
-    if (!val.properties.highway) return;
-    var user = val.properties._user;
-    if (!users[user])
-      users[user] = 0;
-    users[user] += turf.lineDistance(val, "kilometers");
-  });
+    layer.features.forEach(function(val) {
+        var user = val.properties._user; // todo: better uid? what if user changes name?
+        if (!users[user])
+            users[user] = { objects:0, highways: 0.0, buildings: 0 };
+        users[user].objects += 1;
+        if (val.properties.highway && val.geometry.type === "LineString")
+            users[user].highways += turf.lineDistance(val, "kilometers");
+        if (val.properties.building && val.geometry.type !== "Point")
+            users[user].buildings += 1;
+    });
 
-  done(null, users);
+    done(null, users);
 };
