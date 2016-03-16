@@ -65,14 +65,14 @@ module.exports = function _(tileLayers, tile, writeData, done) {
     var todoListIndex = metaX+'/'+metaY;
 
     if (todoList[todoListIndex][0] === tile[0] && todoList[todoListIndex][1] === tile[1]) {
-        processMeta([metaX, metaY, tile[2]-1], done);
+        processMeta([metaX, metaY, tile[2]-1], writeData, done);
     } else {
         done(); // ignore additional tiles in 2x2 meta tile
     }
 
 }
 
-function processMeta(tile, done) {
+function processMeta(tile, writeData, done) {
     var q = queue();
     // load all (zoom+1) VTs in this tile
     q.defer(getVT, [tile[0]*2  , tile[1]*2+1, tile[2]+1]);
