@@ -13,6 +13,7 @@
     "lineclip": "^1.1.5",
     "mbtiles": "^0.8.2",
     "queue-async": "^1.2.1",
+    "rbush": "^1.4.2",
     "sphericalmercator": "^1.0.4",
     "tile-reduce": "3.1.1",
     "turf": "^2.0.2"
