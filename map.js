@@ -11,15 +11,26 @@ module.exports = function(tileLayers, tile, writeData, done) {
     var tileBbox = sphericalmercator.bbox(tile[0],tile[1],tile[2]);
 
     var bins = [],
-        bboxHeight = tileBbox[3]-tileBbox[1], // todo: hmm…
-        bboxWidth  = tileBbox[2]-tileBbox[0];
+        bboxMinXY = sphericalmercator.px([tileBbox[0], tileBbox[1]], tile[2]),
+        bboxMaxXY = sphericalmercator.px([tileBbox[2], tileBbox[3]], tile[2]),
+        bboxWidth  = bboxMaxXY[0]-bboxMinXY[0],
+        bboxHeight = bboxMaxXY[1]-bboxMinXY[1];
     for (var i=0; i<binningFactor; i++) {
         for (var j=0; j<binningFactor; j++) {
+            var binMinXY = [
+                bboxMinXY[0] + bboxWidth /binningFactor*j,
+                bboxMinXY[1] + bboxHeight/binningFactor*i
+            ], binMaxXY = [
+                bboxMinXY[0] + bboxWidth /binningFactor*(j+1),
+                bboxMinXY[1] + bboxHeight/binningFactor*(i+1)
+            ];
+            var binMinLL = sphericalmercator.ll(binMinXY, tile[2]),
+                binMaxLL = sphericalmercator.ll(binMaxXY, tile[2]);
             bins.push([
-                tileBbox[0] + bboxWidth /binningFactor*j,
-                tileBbox[1] + bboxHeight/binningFactor*i,
-                tileBbox[0] + bboxWidth /binningFactor*(j+1),
-                tileBbox[1] + bboxHeight/binningFactor*(i+1),
+                binMinLL[0],
+                binMinLL[1],
+                binMaxLL[0],
+                binMaxLL[1],
                 i*binningFactor + j
             ]);
         }

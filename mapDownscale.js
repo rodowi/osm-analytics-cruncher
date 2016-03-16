@@ -101,15 +101,26 @@ function processMeta(tile, done) {
         var output = turf.featurecollection([]);
         output.properties = { tileX: tile[0], tileY: tile[1], tileZ: tile[2] }; // todo: drop eventually
         var tileBbox = sphericalmercator.bbox(tile[0],tile[1],tile[2]),
-            bboxHeight = tileBbox[3]-tileBbox[1],
-            bboxWidth  = tileBbox[2]-tileBbox[0];
+            bboxMinXY = sphericalmercator.px([tileBbox[0], tileBbox[1]], tile[2]),
+            bboxMaxXY = sphericalmercator.px([tileBbox[2], tileBbox[3]], tile[2]),
+            bboxWidth  = bboxMaxXY[0]-bboxMinXY[0],
+            bboxHeight = bboxMaxXY[1]-bboxMinXY[1]; // todo: reduce code duplication with map.js
         for (var i=0; i<binningFactor; i++) {
             for (var j=0; j<binningFactor; j++) {
+                var binMinXY = [
+                    bboxMinXY[0] + bboxWidth /binningFactor*j,
+                    bboxMinXY[1] + bboxHeight/binningFactor*i
+                ], binMaxXY = [
+                    bboxMinXY[0] + bboxWidth /binningFactor*(j+1),
+                    bboxMinXY[1] + bboxHeight/binningFactor*(i+1)
+                ];
+                var binMinLL = sphericalmercator.ll(binMinXY, tile[2]),
+                    binMaxLL = sphericalmercator.ll(binMaxXY, tile[2]);
                 var bin = turf.bboxPolygon([
-                    tileBbox[0] + bboxWidth /binningFactor*j,
-                    tileBbox[1] + bboxHeight/binningFactor*i,
-                    tileBbox[0] + bboxWidth /binningFactor*(j+1),
-                    tileBbox[1] + bboxHeight/binningFactor*(i+1),
+                    binMinLL[0],
+                    binMinLL[1],
+                    binMaxLL[0],
+                    binMaxLL[1],
                 ]);
                 var _bins = [
                     bins[j*2  ] && bins[j*2  ][i*2  ],
