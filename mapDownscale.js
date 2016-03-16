@@ -39,7 +39,6 @@ var todoList = {},
     initalizationDone = false;
 
 module.exports = function _(tileLayers, tile, writeData, done) {
-
     if (!initalizationDone) {
         // wait until initializations are completed
         initQueue.await(function(err, _getVT, tilesArray) {
@@ -52,10 +51,7 @@ module.exports = function _(tileLayers, tile, writeData, done) {
                 var metaX = Math.floor(tile[0] / 2),
                     metaY = Math.floor(tile[1] / 2);
                 var todoListIndex = metaX+'/'+metaY;
-                if (!todoList[todoListIndex])
-                    todoList[todoListIndex] = [tile[0], tile[1]];
-                else
-                    todoList[todoListIndex] = [Math.min(tile[0], todoList[todoListIndex][0]), Math.min(tile[1], todoList[todoListIndex][1])];
+                todoList[todoListIndex] = [tile[0], tile[1]];
             });
             // re-start current tile-reduce job after initializations are complete
             initalizationDone = true;
