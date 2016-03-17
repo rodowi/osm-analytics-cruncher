@@ -1,5 +1,5 @@
 {
-  "name": "user-experience",
+  "name": "oqt-user-experience",
   "version": "0.0.0",
   "description": "calculates user experience based on amount of edited objects for specific topics",
   "main": "index.js",
