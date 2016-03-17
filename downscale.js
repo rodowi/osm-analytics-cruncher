@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 'use strict';
 var tileReduce = require('tile-reduce');
 var path = require('path');
