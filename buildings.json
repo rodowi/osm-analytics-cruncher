@@ -1,0 +1,8 @@
+{
+    "geometry": "Polygon",
+    "tag": "building",
+    "experience": {
+        "file": "./intermediate/users.json",
+        "field": "buildings"
+    }
+}

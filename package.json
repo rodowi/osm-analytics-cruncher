@@ -1,0 +1,32 @@
+{
+  "name": "osm-dat-backend",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hotosm/osm-dat-backend.git"
+  },
+  "keywords": [
+    "OpenStreetMap",
+    "OSM",
+    "data",
+    "analysis"
+  ],
+  "author": "",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/hotosm/osm-dat-backend/issues"
+  },
+  "homepage": "https://github.com/hotosm/osm-dat-backend",
+  "dependencies": {
+    "oqt-aggregate": "git+https://github.com/tyrasd/oqt-aggregate.git",
+    "oqt-filter": "git+https://github.com/tyrasd/oqt-filter.git",
+    "oqt-merge-properties": "git+https://github.com/tyrasd/oqt-aggregate.git",
+    "oqt-user-experience": "git+https://github.com/tyrasd/oqt-user-experience.git",
+    "user-experience": "git+https://github.com/tyrasd/oqt-user-experience.git"
+  }
+}
