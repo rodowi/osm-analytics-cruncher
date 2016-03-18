@@ -26,6 +26,7 @@
     "oqt-aggregate": "git+https://github.com/tyrasd/oqt-aggregate.git",
     "oqt-filter": "git+https://github.com/tyrasd/oqt-filter.git",
     "oqt-merge-properties": "git+https://github.com/tyrasd/oqt-aggregate.git",
+    "oqt-to-geojson": "git+https://github.com/tyrasd/oqt-to-geojson.git",
     "oqt-user-experience": "git+https://github.com/tyrasd/oqt-user-experience.git",
     "user-experience": "git+https://github.com/tyrasd/oqt-user-experience.git"
   }

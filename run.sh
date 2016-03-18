@@ -19,9 +19,9 @@ for i in {11..0}; do
     ./node_modules/oqt-aggregate/downscale.js intermediate/$2.z$((i+1)).mbtiles | $TIPPECANOE -z $i -Z $i -o intermediate/$2.z$i.mbtiles
 done
 
-# merge mbtiles files of different zooms
-mv intermediate/$2.mbtiles $2.mbtiles
-for i in {11..0}; do
+# create z13-z14 tiles for raw data and merge in aggredate data zoom levels
+./node_modules/oqt-to-geojson/index.js intermediate/$2.mbtiles | tippecanoe -b0 -d18 -psfk -fP -t . -l osm -z 14 -Z 13 -o $2.mbtiles
+for i in {12..0}; do
     echo "merge in zoom $i"
     sqlite3 $2.mbtiles "attach 'intermediate/$2.z$i.mbtiles' as tomerge; BEGIN; insert into tiles select * from tomerge.tiles; COMMIT;"
 done
