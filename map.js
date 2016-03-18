@@ -57,7 +57,11 @@ module.exports = function(tileLayers, tile, writeData, done) {
             if (clipper(geometry, bin).length > 0) { // todo: look at more detail
                 binCounts[index]++;
                 if (!binObjects[index]) binObjects[index] = [];
-                binObjects[index].push(feature.properties._osm_way_id); // todo: rels??
+                binObjects[index].push({
+                    id: feature.properties._osm_way_id, // todo: rels??
+                    timestamp: feature.properties._timestamp,
+                    experience: feature.properties._userExperience
+                });
             }
         });
     });
@@ -67,7 +71,10 @@ module.exports = function(tileLayers, tile, writeData, done) {
         feature.properties.binX = index % binningFactor;
         feature.properties.binY = Math.floor(index / binningFactor);
         feature.properties.count = binCounts[index];
-        feature.properties._osm_way_ids = binObjects[index] ? binObjects[index].join(';') : '';
+        if (!(binCounts[index] > 0)) return;
+        feature.properties.avg_timestamp = average(binObjects[index], 'timestamp'); // todo: don't hardcode properties to average?
+        feature.properties.avg_experience = average(binObjects[index], 'experience');
+        feature.properties.osm_way_ids = binObjects[index].join(';');
     });
     output.features = output.features.filter(function(feature) {
         return feature.properties.count > 0;
@@ -77,3 +84,9 @@ module.exports = function(tileLayers, tile, writeData, done) {
     writeData(JSON.stringify(output)+'\n');
     done();
 };
+
+function average(arr, property) {
+    return arr.reduce(function(prev, current) {
+        return prev + current[property];
+    }, 0) / arr.length;
+}

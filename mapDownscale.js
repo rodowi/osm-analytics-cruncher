@@ -130,7 +130,15 @@ function processMeta(tile, writeData, done) {
                 ].filter(function(b) { return b; });
                 bin.properties.binX = j;
                 bin.properties.binY = i;
-                bin.properties.count = _bins.reduce(function(prev, _bin) { return prev + _bin.properties.count }, 0);
+                bin.properties.count = _bins.reduce(function(prev, _bin) {
+                    return prev + _bin.properties.count;
+                }, 0);
+                bin.properties.avg_timestamp = _bins.reduce(function(prev, _bin) {
+                    return prev + _bin.properties.avg_timestamp * _bin.properties.count;
+                }, 0) / bin.properties.count;
+                bin.properties.avg_experience = _bins.reduce(function(prev, _bin) {
+                    return prev + _bin.properties.avg_experience * _bin.properties.count;
+                }, 0) / bin.properties.count;
                 output.features.push(bin);
             }
         }
