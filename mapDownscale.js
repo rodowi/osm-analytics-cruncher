@@ -139,6 +139,15 @@ function processMeta(tile, writeData, done) {
                 bin.properties.avg_experience = _bins.reduce(function(prev, _bin) {
                     return prev + _bin.properties.avg_experience * _bin.properties.count;
                 }, 0) / bin.properties.count;
+                bin.properties.osm_way_ids = _bins.reduce(function(prev, _bin) {
+                    return prev.concat(_bin.properties.osm_way_ids.slice(0,100));
+                }, []);
+                bin.properties.timestamps = _bins.reduce(function(prev, _bin) {
+                    return prev.concat(_bin.properties.timestamps.slice(0,100));
+                }, []);
+                bin.properties.experiences = _bins.reduce(function(prev, _bin) {
+                    return prev.concat(_bin.properties.experiences.slice(0,100));
+                }, []);
                 output.features.push(bin);
             }
         }

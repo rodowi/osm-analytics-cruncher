@@ -74,7 +74,9 @@ module.exports = function(tileLayers, tile, writeData, done) {
         if (!(binCounts[index] > 0)) return;
         feature.properties.avg_timestamp = average(binObjects[index], 'timestamp'); // todo: don't hardcode properties to average?
         feature.properties.avg_experience = average(binObjects[index], 'experience');
-        feature.properties.osm_way_ids = binObjects[index].join(';');
+        feature.properties.osm_way_ids = binObjects[index].map(function(o) { return o.id; }).join(';');
+        feature.properties.timestamps = binObjects[index].map(function(o) { return o.timestamp; }).join(';');
+        feature.properties.experiences = binObjects[index].map(function(o) { return o.experience; }).join(';');
     });
     output.features = output.features.filter(function(feature) {
         return feature.properties.count > 0;
