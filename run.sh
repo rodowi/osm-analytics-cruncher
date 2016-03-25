@@ -1,6 +1,10 @@
 #!/bin/bash -ex
 
+## todo: make it run in another directory
+## todo: drop unneccessary osm tags
+
 TIPPECANOE="tippecanoe -b0 -d20 -psfk -fP -t . -l osm"
+BINNINGFACTOR=256
 
 # make temporary directory for intermediate results
 mkdir -p intermediate
@@ -12,11 +16,11 @@ mkdir -p intermediate
 ./node_modules/oqt-filter/index.js $1 $2.json | $TIPPECANOE -z 12 -Z 12 -o intermediate/$2.mbtiles
 
 # aggregate to bins
-./node_modules/oqt-aggregate/index.js intermediate/$2.mbtiles | $TIPPECANOE -z 12 -Z 12 -o intermediate/$2.z12.mbtiles
+./node_modules/oqt-aggregate/index.js intermediate/$2.mbtiles $BINNINGFACTOR | $TIPPECANOE -z 12 -Z 12 -o intermediate/$2.z12.mbtiles
 
 # downscale bins to zoom levels 11 to 0
 for i in {11..0}; do
-    ./node_modules/oqt-aggregate/downscale.js intermediate/$2.z$((i+1)).mbtiles | $TIPPECANOE -z $i -Z $i -o intermediate/$2.z$i.mbtiles
+    ./node_modules/oqt-aggregate/downscale.js intermediate/$2.z$((i+1)).mbtiles $BINNINGFACTOR | $TIPPECANOE -z $i -Z $i -o intermediate/$2.z$i.mbtiles
 done
 
 # create z13-z14 tiles for raw data and merge in aggredate data zoom levels
