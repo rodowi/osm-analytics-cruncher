@@ -1,5 +1,5 @@
 'use strict';
-var turf = require('turf');
+var lineDistance = require('turf-line-distance');
 
 // Filter features touched by list of users defined by users.json
 module.exports = function(tileLayers, tile, writeData, done) {
@@ -12,7 +12,7 @@ module.exports = function(tileLayers, tile, writeData, done) {
             users[user] = { objects:0, highways: 0.0, buildings: 0 };
         users[user].objects += 1;
         if (val.properties.highway && val.geometry.type === "LineString")
-            users[user].highways += turf.lineDistance(val, "kilometers");
+            users[user].highways += lineDistance(val, "kilometers");
         if (val.properties.building && val.geometry.type !== "Point")
             users[user].buildings += 1;
     });
