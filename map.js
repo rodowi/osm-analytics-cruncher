@@ -1,7 +1,7 @@
 'use strict';
 var turf = require('turf');
 var lineclip = require('lineclip');
-var sphericalmercator = new (require('sphericalmercator'))();
+var sphericalmercator = new (require('sphericalmercator'))({size: 512});
 var rbush = require('rbush');
 
 var binningFactor = global.mapOptions.binningFactor; // number of slices in each direction

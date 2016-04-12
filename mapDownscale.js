@@ -6,7 +6,7 @@ var MBTiles = require('mbtiles');
 var queue = require('queue-async');
 var binarysplit = require('binary-split');
 var turf = require('turf');
-var sphericalmercator = new (require('sphericalmercator'))();
+var sphericalmercator = new (require('sphericalmercator'))({size: 512});
 
 var binningFactor = global.mapOptions.binningFactor; // number of slices in each direction
 var mbtilesPath = global.mapOptions.mbtilesPath;
