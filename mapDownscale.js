@@ -148,15 +148,17 @@ function processMeta(tile, writeData, done) {
                 var timestamps = _bins.reduce(function(prev, _bin) {
                     return prev.concat(_bin.properties._timestamps.split(';'));
                 }, []);
-                bin.properties._timestampMin = stats.quantile(timestamps, 0.2);
-                bin.properties._timestampMax = stats.quantile(timestamps, 0.8);
-                bin.properties._timestamps = lodash.sampleSize(timestamps, 100).join(';');
+                bin.properties._timestampMin = stats.quantile(timestamps, 0.25);
+                bin.properties._timestampMax = stats.quantile(timestamps, 0.75);
+                bin.properties._timestamps = lodash.sampleSize(timestamps, 16).map(function(timestamp) {
+                  return timestamp - bin.properties._timestamp
+                }).join(';');
                 var experiences = _bins.reduce(function(prev, _bin) {
                     return prev.concat(_bin.properties._userExperiences.split(';'));
                 }, []);
-                bin.properties._userExperienceMin = stats.quantile(experiences, 0.2);
-                bin.properties._userExperienceMax = stats.quantile(experiences, 0.8);
-                bin.properties._userExperiences = lodash.sampleSize(experiences, 100).join(';');
+                bin.properties._userExperienceMin = stats.quantile(experiences, 0.25);
+                bin.properties._userExperienceMax = stats.quantile(experiences, 0.75);
+                bin.properties._userExperiences = lodash.sampleSize(experiences, 16).join(';');
 
                 output.features.push(bin);
             }
