@@ -149,14 +149,14 @@ function processMeta(tile, writeData, done) {
                     return Math.max(prev, _bin.properties._count);
                 }, -1);
                 var timestamps = _bins.reduce(function(prev, _bin) {
-                    var binTimestamps = _bin.properties._timestamps.split(';');
+                    var binTimestamps = _bin.properties._timestamps.split(';').map(Number);
                     return prev.concat(binTimestamps.slice(0, 16*Math.round(_bin.properties._count/maxBinCount)));
                 }, []);
                 bin.properties._timestampMin = stats.quantile(timestamps, 0.25);
                 bin.properties._timestampMax = stats.quantile(timestamps, 0.75);
                 bin.properties._timestamps = lodash.sampleSize(timestamps, 16).join(';');
                 var experiences = _bins.reduce(function(prev, _bin) {
-                    var binExperiences = _bin.properties._userExperiences.split(';');
+                    var binExperiences = _bin.properties._userExperiences.split(';').map(Number);
                     return prev.concat(binExperiences.slice(0, 16*Math.round(_bin.properties._count/maxBinCount)));
                 }, []);
                 bin.properties._userExperienceMin = stats.quantile(experiences, 0.25);
