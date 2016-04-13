@@ -3,6 +3,7 @@ var turf = require('turf');
 var lineclip = require('lineclip');
 var sphericalmercator = new (require('sphericalmercator'))({size: 512});
 var rbush = require('rbush');
+var lodash = require('lodash');
 
 var binningFactor = global.mapOptions.binningFactor; // number of slices in each direction
 
@@ -59,8 +60,8 @@ module.exports = function(tileLayers, tile, writeData, done) {
                 if (!binObjects[index]) binObjects[index] = [];
                 binObjects[index].push({
                     id: feature.properties._osm_way_id, // todo: rels??
-                    timestamp: feature.properties._timestamp,
-                    experience: feature.properties._userExperience
+                    _timestamp: feature.properties._timestamp,
+                    _userExperience: feature.properties._userExperience
                 });
             }
         });
@@ -72,11 +73,14 @@ module.exports = function(tileLayers, tile, writeData, done) {
         feature.properties.binY = Math.floor(index / binningFactor);
         feature.properties.count = binCounts[index];
         if (!(binCounts[index] > 0)) return;
-        feature.properties.avg_timestamp = average(binObjects[index], 'timestamp'); // todo: don't hardcode properties to average?
-        feature.properties.avg_experience = average(binObjects[index], 'experience');
-        feature.properties.osm_way_ids = binObjects[index].map(function(o) { return o.id; }).join(';');
-        feature.properties.timestamps = binObjects[index].map(function(o) { return o.timestamp; }).join(';');
-        feature.properties.experiences = binObjects[index].map(function(o) { return o.experience; }).join(';');
+        feature.properties._timestamp = lodash.meanBy(binObjects[index], '_timestamp'); // todo: don't hardcode properties to average?
+        feature.properties._userExperience = lodash.meanBy(binObjects[index], '_userExperience');
+        //feature.properties.osm_way_ids = binObjects[index].map(function(o) { return o.id; }).join(';');
+        // ^ todo: do only partial counts for objects spanning between multiple bins?
+        var timestamps = lodash.map(binObjects[index], '_timestamp');
+        feature.properties._timestamps = lodash.sampleSize(timestamps, 100).join(';');
+        var experiences = lodash.map(binObjects[index], '_userExperience');
+        feature.properties._userExperiences = lodash.sampleSize(experiences, 100).join(';');
     });
     output.features = output.features.filter(function(feature) {
         return feature.properties.count > 0;
@@ -86,9 +90,3 @@ module.exports = function(tileLayers, tile, writeData, done) {
     writeData(JSON.stringify(output)+'\n');
     done();
 };
-
-function average(arr, property) {
-    return arr.reduce(function(prev, current) {
-        return prev + current[property];
-    }, 0) / arr.length;
-}

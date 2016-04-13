@@ -7,6 +7,7 @@ var queue = require('queue-async');
 var binarysplit = require('binary-split');
 var turf = require('turf');
 var sphericalmercator = new (require('sphericalmercator'))({size: 512});
+var lodash = require('lodash');
 
 var binningFactor = global.mapOptions.binningFactor; // number of slices in each direction
 var mbtilesPath = global.mapOptions.mbtilesPath;
@@ -130,24 +131,28 @@ function processMeta(tile, writeData, done) {
                 ].filter(function(b) { return b; });
                 bin.properties.binX = j;
                 bin.properties.binY = i;
-                bin.properties.count = _bins.reduce(function(prev, _bin) {
+                bin.properties._count = _bins.reduce(function(prev, _bin) {
                     return prev + _bin.properties.count;
                 }, 0);
-                bin.properties.avg_timestamp = _bins.reduce(function(prev, _bin) {
-                    return prev + _bin.properties.avg_timestamp * _bin.properties.count;
-                }, 0) / bin.properties.count;
-                bin.properties.avg_experience = _bins.reduce(function(prev, _bin) {
-                    return prev + _bin.properties.avg_experience * _bin.properties.count;
-                }, 0) / bin.properties.count;
-                bin.properties.osm_way_ids = _bins.reduce(function(prev, _bin) {
-                    return prev.concat(_bin.properties.osm_way_ids.slice(0,100));
-                }, []);
-                bin.properties.timestamps = _bins.reduce(function(prev, _bin) {
-                    return prev.concat(_bin.properties.timestamps.slice(0,100));
-                }, []);
-                bin.properties.experiences = _bins.reduce(function(prev, _bin) {
-                    return prev.concat(_bin.properties.experiences.slice(0,100));
-                }, []);
+                bin.properties._timestamp = _bins.reduce(function(prev, _bin) {
+                    return prev + _bin.properties._timestamp * _bin.properties.count;
+                }, 0) / bin.properties.count; // todo: calc fom sampled timestamps
+                bin.properties._userExperience = _bins.reduce(function(prev, _bin) {
+                    return prev + _bin.properties._userExperience * _bin.properties.count;
+                }, 0) / bin.properties.count; // todo: calc from sampled experiences
+                //bin.properties.osm_way_ids = _bins.reduce(function(prev, _bin) {
+                //    return prev.concat(_bin.properties.osm_way_ids.slice(0,100));
+                //}, []);
+                bin.properties._timestamps = _bins.reduce(function(prev, _bin) {
+                    return prev.concat(
+                        lodash.sampleSize(_bin.properties._timestamps.split(';'), 25)
+                    );
+                }, []).join(';');
+                bin.properties._userExperiences = _bins.reduce(function(prev, _bin) {
+                    return prev.concat(
+                        lodash.sampleSize(_bin.properties._userExperiences.split(';'), 25)
+                    );
+                }, []).join(';');
                 output.features.push(bin);
             }
         }
