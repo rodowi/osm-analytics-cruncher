@@ -145,8 +145,12 @@ function processMeta(tile, writeData, done) {
                 //bin.properties.osm_way_ids = _bins.reduce(function(prev, _bin) {
                 //    return prev.concat(_bin.properties.osm_way_ids.slice(0,100));
                 //}, []);
+                var maxBinCount = _bins.reduce(function(prev, _bin) {
+                    return Math.max(prev, _bin.properties._count);
+                }, -1);
                 var timestamps = _bins.reduce(function(prev, _bin) {
-                    return prev.concat(_bin.properties._timestamps.split(';'));
+                    var binTimestamps = _bin.properties._timestamps.split(';');
+                    return prev.concat(binTimestamps.slice(0, 16*Math.round(_bin.properties._count/maxBinCount)));
                 }, []);
                 bin.properties._timestampMin = stats.quantile(timestamps, 0.25);
                 bin.properties._timestampMax = stats.quantile(timestamps, 0.75);
@@ -154,7 +158,8 @@ function processMeta(tile, writeData, done) {
                   return timestamp - bin.properties._timestamp
                 }).join(';');
                 var experiences = _bins.reduce(function(prev, _bin) {
-                    return prev.concat(_bin.properties._userExperiences.split(';'));
+                    var binExperiences = _bin.properties._userExperiences.split(';');
+                    return prev.concat(binExperiences.slice(0, 16*Math.round(_bin.properties._count/maxBinCount)));
                 }, []);
                 bin.properties._userExperienceMin = stats.quantile(experiences, 0.25);
                 bin.properties._userExperienceMax = stats.quantile(experiences, 0.75);
