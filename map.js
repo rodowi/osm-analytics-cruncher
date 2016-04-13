@@ -4,6 +4,7 @@ var lineclip = require('lineclip');
 var sphericalmercator = new (require('sphericalmercator'))({size: 512});
 var rbush = require('rbush');
 var lodash = require('lodash');
+var stats = require('simple-statistics');
 
 var binningFactor = global.mapOptions.binningFactor; // number of slices in each direction
 
@@ -78,8 +79,12 @@ module.exports = function(tileLayers, tile, writeData, done) {
         //feature.properties.osm_way_ids = binObjects[index].map(function(o) { return o.id; }).join(';');
         // ^ todo: do only partial counts for objects spanning between multiple bins?
         var timestamps = lodash.map(binObjects[index], '_timestamp');
+        feature.properties._timestampMin = stats.quantile(timestamps, 0.2);
+        feature.properties._timestampMax = stats.quantile(timestamps, 0.8);
         feature.properties._timestamps = lodash.sampleSize(timestamps, 100).join(';');
         var experiences = lodash.map(binObjects[index], '_userExperience');
+        feature.properties._userExperienceMin = stats.quantile(experiences, 0.2);
+        feature.properties._userExperienceMax = stats.quantile(experiences, 0.8);
         feature.properties._userExperiences = lodash.sampleSize(experiences, 100).join(';');
     });
     output.features = output.features.filter(function(feature) {

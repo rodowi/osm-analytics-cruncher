@@ -8,6 +8,7 @@ var binarysplit = require('binary-split');
 var turf = require('turf');
 var sphericalmercator = new (require('sphericalmercator'))({size: 512});
 var lodash = require('lodash');
+var stats = require('simple-statistics');
 
 var binningFactor = global.mapOptions.binningFactor; // number of slices in each direction
 var mbtilesPath = global.mapOptions.mbtilesPath;
@@ -140,19 +141,23 @@ function processMeta(tile, writeData, done) {
                 bin.properties._userExperience = _bins.reduce(function(prev, _bin) {
                     return prev + _bin.properties._userExperience * _bin.properties.count;
                 }, 0) / bin.properties.count; // todo: calc from sampled experiences
+
                 //bin.properties.osm_way_ids = _bins.reduce(function(prev, _bin) {
                 //    return prev.concat(_bin.properties.osm_way_ids.slice(0,100));
                 //}, []);
-                bin.properties._timestamps = _bins.reduce(function(prev, _bin) {
-                    return prev.concat(
-                        lodash.sampleSize(_bin.properties._timestamps.split(';'), 25)
-                    );
-                }, []).join(';');
-                bin.properties._userExperiences = _bins.reduce(function(prev, _bin) {
-                    return prev.concat(
-                        lodash.sampleSize(_bin.properties._userExperiences.split(';'), 25)
-                    );
-                }, []).join(';');
+                var timestamps = _bins.reduce(function(prev, _bin) {
+                    return prev.concat(_bin.properties._timestamps.split(';'));
+                }, []);
+                bin.properties._timestampMin = stats.quantile(timestamps, 0.2);
+                bin.properties._timestampMax = stats.quantile(timestamps, 0.8);
+                bin.properties._timestamps = lodash.sampleSize(timestamps, 100).join(';');
+                var experiences = _bins.reduce(function(prev, _bin) {
+                    return prev.concat(_bin.properties._userExperiences.split(';'));
+                }, []);
+                bin.properties._userExperienceMin = stats.quantile(experiences, 0.2);
+                bin.properties._userExperienceMax = stats.quantile(experiences, 0.8);
+                bin.properties._userExperiences = lodash.sampleSize(experiences, 100).join(';');
+
                 output.features.push(bin);
             }
         }
