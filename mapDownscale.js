@@ -135,6 +135,9 @@ function processMeta(tile, writeData, done) {
                 bin.properties._count = _bins.reduce(function(prev, _bin) {
                     return prev + _bin.properties._count;
                 }, 0);
+                bin.properties._lineDistance = _bins.reduce(function(prev, _bin) {
+                    return prev + _bin.properties._lineDistance;
+                }, 0);
                 bin.properties._timestamp = _bins.reduce(function(prev, _bin) {
                     return prev + _bin.properties._timestamp * _bin.properties._count;
                 }, 0) / bin.properties._count; // todo: calc fom sampled timestamps

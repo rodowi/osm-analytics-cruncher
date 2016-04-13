@@ -38,6 +38,7 @@ module.exports = function(tileLayers, tile, writeData, done) {
         }
     }
     var binCounts = Array(bins.length+1).join(0).split('').map(Number); // initialize with zeros
+    var binDistances = Array(bins.length+1).join(0).split('').map(Number); // initialize with zeros
     var binObjects = Array(bins.length);
     var binTree = rbush();
     binTree.load(bins);
@@ -60,7 +61,11 @@ module.exports = function(tileLayers, tile, writeData, done) {
         featureBins.forEach(function(bin) {
             var index = bin[4];
             binCounts[index] += 1/featureBins.length;
-            // todo: clipped lengths
+            if (feature.geometry.type === 'LineString') {
+                clipper(geometry, bin).forEach(function(coords) {
+                    binDistances[index] += turf.lineDistance(turf.linestring(coords), 'kilometers');
+                });
+            }
             if (!binObjects[index]) binObjects[index] = [];
             binObjects[index].push({
                 id: feature.properties._osm_way_id, // todo: rels??
@@ -75,6 +80,7 @@ module.exports = function(tileLayers, tile, writeData, done) {
         feature.properties.binX = index % binningFactor;
         feature.properties.binY = Math.floor(index / binningFactor);
         feature.properties._count = binCounts[index];
+        feature.properties._lineDistance = binDistances[index];
         if (!(binCounts[index] > 0)) return;
         feature.properties._timestamp = lodash.meanBy(binObjects[index], '_timestamp'); // todo: don't hardcode properties to average?
         feature.properties._userExperience = lodash.meanBy(binObjects[index], '_userExperience');
