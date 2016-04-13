@@ -54,17 +54,19 @@ module.exports = function(tileLayers, tile, writeData, done) {
         } else return console.error('unsupported geometry type');
 
         var featureBbox = turf.extent(feature);
-        binTree.search(featureBbox).forEach(function(bin) {
+        var featureBins = binTree.search(featureBbox).filter(function(bin) {
+          return clipper(geometry, bin).length > 0;
+        });
+        featureBins.forEach(function(bin) {
             var index = bin[4];
-            if (clipper(geometry, bin).length > 0) { // todo: look at more detail
-                binCounts[index]++;
-                if (!binObjects[index]) binObjects[index] = [];
-                binObjects[index].push({
-                    id: feature.properties._osm_way_id, // todo: rels??
-                    _timestamp: feature.properties._timestamp,
-                    _userExperience: feature.properties._userExperience
-                });
-            }
+            binCounts[index] += 1/featureBins.length;
+            // todo: clipped lengths
+            if (!binObjects[index]) binObjects[index] = [];
+            binObjects[index].push({
+                id: feature.properties._osm_way_id, // todo: rels??
+                _timestamp: feature.properties._timestamp,
+                _userExperience: feature.properties._userExperience
+            });
         });
     });
 
