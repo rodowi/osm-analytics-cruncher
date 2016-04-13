@@ -155,7 +155,7 @@ function processMeta(tile, writeData, done) {
                 bin.properties._timestampMin = stats.quantile(timestamps, 0.25);
                 bin.properties._timestampMax = stats.quantile(timestamps, 0.75);
                 bin.properties._timestamps = lodash.sampleSize(timestamps, 16).map(function(timestamp) {
-                  return timestamp - bin.properties._timestamp
+                    return timestamp - bin.properties._timestamp
                 }).join(';');
                 var experiences = _bins.reduce(function(prev, _bin) {
                     var binExperiences = _bin.properties._userExperiences.split(';');
