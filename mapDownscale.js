@@ -133,14 +133,14 @@ function processMeta(tile, writeData, done) {
                 bin.properties.binX = j;
                 bin.properties.binY = i;
                 bin.properties._count = _bins.reduce(function(prev, _bin) {
-                    return prev + _bin.properties.count;
+                    return prev + _bin.properties._count;
                 }, 0);
                 bin.properties._timestamp = _bins.reduce(function(prev, _bin) {
-                    return prev + _bin.properties._timestamp * _bin.properties.count;
-                }, 0) / bin.properties.count; // todo: calc fom sampled timestamps
+                    return prev + _bin.properties._timestamp * _bin.properties._count;
+                }, 0) / bin.properties._count; // todo: calc fom sampled timestamps
                 bin.properties._userExperience = _bins.reduce(function(prev, _bin) {
-                    return prev + _bin.properties._userExperience * _bin.properties.count;
-                }, 0) / bin.properties.count; // todo: calc from sampled experiences
+                    return prev + _bin.properties._userExperience * _bin.properties._count;
+                }, 0) / bin.properties._count; // todo: calc from sampled experiences
 
                 //bin.properties.osm_way_ids = _bins.reduce(function(prev, _bin) {
                 //    return prev.concat(_bin.properties.osm_way_ids.slice(0,100));
@@ -162,7 +162,7 @@ function processMeta(tile, writeData, done) {
             }
         }
         output.features = output.features.filter(function(feature) {
-            return feature.properties.count > 0;
+            return feature.properties._count > 0;
         });
         // write to stdout
         writeData(JSON.stringify(output)+'\n');

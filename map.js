@@ -72,7 +72,7 @@ module.exports = function(tileLayers, tile, writeData, done) {
     output.features.forEach(function(feature, index) {
         feature.properties.binX = index % binningFactor;
         feature.properties.binY = Math.floor(index / binningFactor);
-        feature.properties.count = binCounts[index];
+        feature.properties._count = binCounts[index];
         if (!(binCounts[index] > 0)) return;
         feature.properties._timestamp = lodash.meanBy(binObjects[index], '_timestamp'); // todo: don't hardcode properties to average?
         feature.properties._userExperience = lodash.meanBy(binObjects[index], '_userExperience');
@@ -88,7 +88,7 @@ module.exports = function(tileLayers, tile, writeData, done) {
         feature.properties._userExperiences = lodash.sampleSize(experiences, 100).join(';');
     });
     output.features = output.features.filter(function(feature) {
-        return feature.properties.count > 0;
+        return feature.properties._count > 0;
     });
     output.properties = { tileX: tile[0], tileY: tile[1], tileZ: tile[2] };
 
