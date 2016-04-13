@@ -83,9 +83,7 @@ module.exports = function(tileLayers, tile, writeData, done) {
         var timestamps = lodash.map(binObjects[index], '_timestamp');
         feature.properties._timestampMin = stats.quantile(timestamps, 0.25);
         feature.properties._timestampMax = stats.quantile(timestamps, 0.75);
-        feature.properties._timestamps = lodash.sampleSize(timestamps, 16).map(function(timestamp) {
-            return timestamp - feature.properties._timestamp
-        }).join(';');
+        feature.properties._timestamps = lodash.sampleSize(timestamps, 16).join(';');
         var experiences = lodash.map(binObjects[index], '_userExperience');
         feature.properties._userExperienceMin = stats.quantile(experiences, 0.25);
         feature.properties._userExperienceMax = stats.quantile(experiences, 0.75);

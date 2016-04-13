@@ -154,9 +154,7 @@ function processMeta(tile, writeData, done) {
                 }, []);
                 bin.properties._timestampMin = stats.quantile(timestamps, 0.25);
                 bin.properties._timestampMax = stats.quantile(timestamps, 0.75);
-                bin.properties._timestamps = lodash.sampleSize(timestamps, 16).map(function(timestamp) {
-                    return timestamp - bin.properties._timestamp
-                }).join(';');
+                bin.properties._timestamps = lodash.sampleSize(timestamps, 16).join(';');
                 var experiences = _bins.reduce(function(prev, _bin) {
                     var binExperiences = _bin.properties._userExperiences.split(';');
                     return prev.concat(binExperiences.slice(0, 16*Math.round(_bin.properties._count/maxBinCount)));
