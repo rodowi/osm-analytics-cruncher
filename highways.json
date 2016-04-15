@@ -1,0 +1,8 @@
+{
+    "geometry": "LineString",
+    "tag": "highway",
+    "experience": {
+        "file": "./intermediate/users.json",
+        "field": "highways"
+    }
+}
