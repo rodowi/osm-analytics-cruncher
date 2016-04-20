@@ -28,6 +28,8 @@
     "oqt-merge-properties": "git+https://github.com/tyrasd/oqt-aggregate.git",
     "oqt-to-geojson": "git+https://github.com/tyrasd/oqt-to-geojson.git",
     "oqt-user-experience": "git+https://github.com/tyrasd/oqt-user-experience.git",
+    "superagent": "^1.8.3",
+    "turf": "^2.0.2",
     "user-experience": "git+https://github.com/tyrasd/oqt-user-experience.git"
   }
 }
