@@ -42,6 +42,10 @@ function done() {
   );
   console.error('got '+allProjects.features.length+' hot projects');
 
+  allProjects.features.forEach(function(feature) {
+    feature.properties.id = feature.id;
+  });
+
   if (raw) {
     process.stdout.write(JSON.stringify(allProjects, null, 0));
     return;
