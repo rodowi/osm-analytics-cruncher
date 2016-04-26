@@ -3,7 +3,7 @@
 ## todo: make it run in another directory
 ## todo: drop unneccessary osm tags
 
-TIPPECANOE="tippecanoe -b0 -d20 -psfk -fP -t . -l osm"
+TIPPECANOE="tippecanoe -b0 -d20 -psfk -fP -t . -l osm -q"
 BINNINGFACTOR=64
 
 # make temporary directory for intermediate results
@@ -24,7 +24,7 @@ for i in {11..0}; do
 done
 
 # create z13-z14 tiles for raw data and merge in aggredate data zoom levels
-./node_modules/oqt-to-geojson/index.js intermediate/$2.mbtiles | tippecanoe -b0 -d18 -psfk -fP -t . -l osm -z 14 -Z 13 -o $2.mbtiles
+./node_modules/oqt-to-geojson/index.js intermediate/$2.mbtiles | tippecanoe -b0 -d18 -psfk -fP -t . -l osm -q -z 14 -Z 13 -o $2.mbtiles
 for i in {12..0}; do
     echo "merge in zoom $i"
     sqlite3 $2.mbtiles "attach 'intermediate/$2.z$i.mbtiles' as tomerge; BEGIN; insert into tiles select * from tomerge.tiles; COMMIT;"
