@@ -1,10 +1,12 @@
-#!/bin/env node
+#!/usr/bin/env node
 
 var fs = require('fs');
 var sa = require('superagent');
 var turf = require('turf');
 
 var fetched = {};
+
+var raw = process.argv[2] !== undefined;
 
 function getPage(page, callback) {
   console.error('fetching page', page);
@@ -39,6 +41,11 @@ function done() {
     })
   );
   console.error('got '+allProjects.features.length+' hot projects');
+
+  if (raw) {
+    process.stdout.write(JSON.stringify(allProjects, null, 0));
+    return;
+  }
 
   var maxNodeCount = 40;
   var allProjectsSimplified = turf.featurecollection(
