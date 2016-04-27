@@ -1,14 +1,14 @@
 {
-  "name": "osm-dat-backend",
+  "name": "osm-analytics-cruncher",
   "version": "0.0.0",
-  "description": "",
+  "description": "backend code and scripts for osm-analytics",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hotosm/osm-dat-backend.git"
+    "url": "https://github.com/hotosm/osm-analytics-cruncher.git"
   },
   "keywords": [
     "OpenStreetMap",
@@ -16,23 +16,23 @@
     "data",
     "analysis"
   ],
-  "author": "",
-  "license": "",
+  "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/hotosm/osm-dat-backend/issues"
+    "url": "https://github.com/hotosm/osm-analytics-cruncher/issues"
   },
-  "homepage": "https://github.com/hotosm/osm-dat-backend",
+  "homepage": "https://github.com/hotosm/osm-analytics-cruncher",
   "dependencies": {
     "binary-split": "^1.0.0",
     "lineclip": "^1.1.5",
     "lodash": "^4.10.0",
+    "mapbox-tile-copy": "^4.4.0",
     "mbtiles": "^0.8.2",
     "queue-async": "^1.2.1",
     "rbush": "^1.4.2",
     "simple-statistics": "git+https://github.com/simple-statistics/simple-statistics.git#64063607859eec4ede0bced6afb4cef0516d251b",
     "sphericalmercator": "^1.0.4",
+    "superagent": "^1.8.3",
     "tile-reduce": "^3.1.1",
-    "turf": "^2.0.2",
-    "superagent": "^1.8.3"
+    "turf": "^2.0.2"
   }
 }
