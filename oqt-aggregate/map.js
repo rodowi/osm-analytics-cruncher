@@ -52,7 +52,7 @@ module.exports = function(tileLayers, tile, writeData, done) {
         } else if (feature.geometry.type === 'Polygon') {
             clipper = lineclip.polygon;
             geometry = feature.geometry.coordinates[0];
-        } else return console.error('unsupported geometry type');
+        } else return;// todo: support more geometry types
 
         var featureBbox = turf.extent(feature);
         var featureBins = binTree.search(featureBbox).filter(function(bin) {
