@@ -10,9 +10,11 @@ Usage
 
 Generates a user experience file (`experiences.json`) to be used with `run.sh`.
 
-### `./run.sh <path-to-osmqatiles.mbtiles> <job>`
+### `./run.sh <path-to-osmqatiles.mbtiles> <job> [<binningfactor>]`
 
-Creates vector tiles for a specific feature type (e.g. buildings). Requires an experience data file (see above). A *job* is defined in the corresponding `<job>.json` file. See [`building.json`](https://github.com/hotosm/osm-dat-backend/blob/master/buildings.json) for an example.
+Creates vector tiles for a specific feature type (e.g. buildings). Requires an experience data file (see above). A *job* is defined in the corresponding `<job>.json` file. See `building.json` for an example. The *binningfactor* determines how fine the grid at lower zoom levels should be calculated (default: 64).
+
+Output is `<job>.mbtiles`.
 
 ### `./hotprojects.sh`
 
