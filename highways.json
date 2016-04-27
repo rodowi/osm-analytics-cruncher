@@ -2,7 +2,7 @@
     "geometry": "LineString",
     "tag": "highway",
     "experience": {
-        "file": "./intermediate/users.json",
+        "file": "./experiences.json",
         "field": "highways"
     }
 }

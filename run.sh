@@ -9,9 +9,6 @@ BINNINGFACTOR=64
 # make temporary directory for intermediate results
 mkdir -p intermediate
 
-# calculate user experience stats
-./node_modules/oqt-user-experience/index.js $1 > intermediate/users.json
-
 # apply filter, merge with user experience data
 ./node_modules/oqt-filter/index.js $1 $2.json | $TIPPECANOE -z 12 -Z 12 -o intermediate/$2.mbtiles
 

@@ -6,6 +6,14 @@ Backend for an OSM data analysis tool. Uses [osm-qa-tiles](osmlab.github.io/osm-
 Usage
 -----
 
-    ./run.sh <path-to-osmqatiles.mbtiles> <filter>
+### `./experiences.sh <path-to-osmqatiles.mbtiles>`
 
-A *filter* is defined in the corresponding `<filter>.json` file. See [`building.json`](https://github.com/hotosm/osm-dat-backend/blob/master/buildings.json) for an example.
+Generates a user experience file (`experiences.json`) to be used with `run.sh`.
+
+### `./run.sh <path-to-osmqatiles.mbtiles> <job>`
+
+Creates vector tiles for a specific feature type (e.g. buildings). Requires an experience data file (see above). A *job* is defined in the corresponding `<job>.json` file. See [`building.json`](https://github.com/hotosm/osm-dat-backend/blob/master/buildings.json) for an example.
+
+### `./hotprojects.sh`
+
+Fetches the list of HOT projects outlines from the [tasking manager API](https://github.com/hotosm/osm-tasking-manager2/wiki/API). Generates vector tiles of the raw geometries and a geojson of simplified outlines (convex hulls limited to 40 vertices). Publishes the results on Amazon S3.

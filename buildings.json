@@ -2,7 +2,7 @@
     "geometry": "Polygon",
     "tag": "building",
     "experience": {
-        "file": "./intermediate/users.json",
+        "file": "./experiences.json",
         "field": "buildings"
     }
 }
