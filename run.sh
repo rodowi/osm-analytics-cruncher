@@ -4,7 +4,7 @@
 ## todo: drop unneccessary osm tags
 
 TIPPECANOE="tippecanoe -b0 -d20 -psfk -fP -t . -l osm -q"
-BINNINGFACTOR=64
+BINNINGFACTOR=${3:-64}
 
 # make temporary directory for intermediate results
 mkdir -p intermediate
