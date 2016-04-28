@@ -10,6 +10,7 @@ var cpus = require('os').cpus().length;
 
 tileReduce({
     map: path.join(__dirname, '/mapDownscale.js'),
+    log: false,
     sources: [{
         name: 'osm',
         mbtiles: mbtilesPath,

@@ -8,6 +8,7 @@ var binningFactor = +process.argv[3] || 100;
 
 tileReduce({
     map: path.join(__dirname, '/map.js'),
+    log: false,
     sources: [{
         name: 'osm',
         mbtiles: mbtilesPath,
