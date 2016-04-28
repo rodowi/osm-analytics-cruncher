@@ -11,7 +11,7 @@ var raw = process.argv[2] !== undefined;
 function getPage(page, callback) {
   console.error('fetching page', page);
   sa.get(
-    'http://tasks.hotosm.org/projects.json?page='+page,
+    'http://tasks.hotosm.org/projects.json?show_archived=on&page='+page,
     function(err,res) {
       callback(err, res.body.features);
   });
