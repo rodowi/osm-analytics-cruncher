@@ -12,16 +12,22 @@ module.exports = function(tileLayers, tile, writeData, done) {
     var layer = tileLayers.osm.osm;
 
     // filter
+    function hasTag(feature, tag) {
+        return feature.properties[tag] && feature.properties[tag] !== 'no';
+    }
     layer.features = layer.features.filter(function(feature) {
-        function hasTag(tag) {
-            return feature.properties[tag] && feature.properties[tag] !== 'no';
-        }
-        return feature.geometry.type === filter.geometry && hasTag(filter.tag);
+        return feature.geometry.type === filter.geometry && hasTag(feature, filter.tag);
     });
 
     // enhance with user experience data
     layer.features.forEach(function(feature) {
-        var user = feature.properties._uid;
+        var props = feature.properties;
+        feature.properties = {
+            _uid : props['@uid'],
+            _timestamp: props['@timestamp']
+        };
+        feature.properties[filter.tag] = props[filter.tag];
+        var user = feature.properties['@uid'];
         if (users[user] && users[user][filter.experience.field])
             feature.properties._userExperience = users[user][filter.experience.field]; // todo: include all/generic experience data?
     });

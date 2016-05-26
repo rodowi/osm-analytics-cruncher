@@ -68,7 +68,7 @@ module.exports = function(tileLayers, tile, writeData, done) {
             }
             if (!binObjects[index]) binObjects[index] = [];
             binObjects[index].push({
-                id: feature.properties._osm_way_id, // todo: rels??
+                //id: feature.properties._osm_way_id, // todo: rels??
                 _timestamp: feature.properties._timestamp,
                 _userExperience: feature.properties._userExperience
             });
