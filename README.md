@@ -16,9 +16,9 @@ Creates vector tiles for a specific feature type (e.g. buildings). Requires an e
 
 Output is `<job>.mbtiles`.
 
-#### `./hotprojects.sh`
+#### `./hotprojects.sh s3://<bucket>/<path>`
 
-Fetches the list of HOT projects outlines from the [tasking manager API](https://github.com/hotosm/osm-tasking-manager2/wiki/API). Generates vector tiles of the raw geometries and a geojson of simplified outlines (convex hulls limited to 40 vertices). Publishes the results on Amazon S3.
+Fetches the list of HOT projects outlines from the [tasking manager API](https://github.com/hotosm/osm-tasking-manager2/wiki/API). Generates vector tiles of the raw geometries and a geojson of simplified outlines (convex hulls limited to 40 vertices). Publishes the results on Amazon S3. You should set up your AWS credentials for this to work. See [Configuring the AWS Command Line Interface](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) for instructions on how to do this.
 
 server
 ------
